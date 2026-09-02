@@ -54,12 +54,62 @@ def sync_to_google_sheet(det_data):
     except Exception as e:
         print(f"[GOOGLE SHEET SYNC NOTICE] {e}")
 
-def can_access_case(detective_clearance, case_required_clearance):
-    return detective_clearance >= case_required_clearance
+DATABASE_URL = os.environ.get("DATABASE_URL", "")
+
+class DBWrapper:
+    def __init__(self):
+        self.is_postgres = False
+        if DATABASE_URL and ("postgres://" in DATABASE_URL or "postgresql://" in DATABASE_URL):
+            try:
+                import psycopg2
+                clean_url = DATABASE_URL.split("?")[0]
+                self.conn = psycopg2.connect(clean_url)
+                self.conn.autocommit = True
+                self.is_postgres = True
+            except Exception as e:
+                print(f"[DB WARN] Postgres connect failed, fallback SQLite: {e}")
+                self.conn = sqlite3.connect(DB_FILE)
+        else:
+            self.conn = sqlite3.connect(DB_FILE)
+
+    def execute(self, query, params=()):
+        cursor = self.conn.cursor()
+        q = query
+        if self.is_postgres:
+            q = q.replace("AUTOINCREMENT", "")
+            q = q.replace("INTEGER PRIMARY KEY", "SERIAL PRIMARY KEY")
+            q = q.replace("?", "%s")
+        cursor.execute(q, params)
+        return cursor
+
+    def executemany(self, query, params_list):
+        cursor = self.conn.cursor()
+        q = query
+        if self.is_postgres:
+            q = q.replace("?", "%s")
+        cursor.executemany(q, params_list)
+        return cursor
+
+    def commit(self):
+        if not self.is_postgres:
+            try:
+                self.conn.commit()
+            except Exception:
+                pass
+
+    def close(self):
+        try:
+            self.conn.close()
+        except Exception:
+            pass
+
+def get_db():
+    return DBWrapper()
 
 def init_db():
-    conn = sqlite3.connect(DB_FILE)
-    cursor = conn.cursor()
+    db = get_db()
+    conn = db.conn
+    cursor = db.conn.cursor()
     
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS users (
@@ -925,5 +975,6 @@ if __name__ == "__main__":
     print(f"SYSTEM STATUS: ONLINE (DEMO ACCOUNT & FULL API)")
     print(f"LISTENING ON: http://0.0.0.0:{PORT}")
     print(f"==================================================")
-    server = socketserver.TCPServer(("0.0.0.0", PORT), DCIServerHandler)
+    socketserver.TCPServer.allow_reuse_address = True
+    server = socketserver.ThreadingTCPServer(("0.0.0.0", PORT), DCIServerHandler)
     server.serve_forever()
