@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIRECTORATE OF CRIMINAL INVESTIGATION (DCI) — Official Portal</title>
+  <link rel="stylesheet" href="css/dci_styles.css">
+  <style>
+    @keyframes spinSeal {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HIGH-TECH DCI CLASSIFIED LANDING TERMINAL BOOT SCREEN -->
+  <div id="dci-boot-overlay" style="position:fixed; top:0; left:0; right:0; bottom:0; z-index:99999; background:radial-gradient(circle at 50% 40%, #0d1527 0%, #04070d 85%); display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:var(--font-mono); text-align:center; cursor:pointer; overflow:hidden;" onclick="initializeTerminalAndAudio()">
+    
+    <!-- Glowing Official Blue & Gold Emblem Seal -->
+    <div style="position:relative; margin-bottom:28px;">
+      <div style="position:absolute; top:-22px; left:-22px; right:-22px; bottom:-22px; border:2px dashed var(--accent-amber); border-radius:50%; animation:spinSeal 14s linear infinite; opacity:0.5;"></div>
+      <img src="images/dci_official_logo.png" alt="Directorate of Criminal Investigation Official Emblem" style="width:165px; height:165px; border-radius:50%; box-shadow:0 0 35px rgba(245, 158, 11, 0.4); object-fit:contain; display:block;">
+    </div>
+
+    <div style="font-size:0.78rem; color:var(--accent-amber); letter-spacing:4px; text-transform:uppercase; margin-bottom:12px; font-weight:600;">
+      DIRECTORATE OF CRIMINAL INVESTIGATION • SECURE NODE 89
+    </div>
+
+    <h1 style="color:#fff; font-size:2.4rem; letter-spacing:3px; margin-bottom:12px; text-transform:uppercase; font-weight:700; text-shadow:0 0 20px rgba(255,255,255,0.2);">
+      CLASSIFIED DETECTIVE PORTAL
+    </h1>
+
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:24px;">
+      <span class="badge red" style="font-size:0.75rem; padding:4px 10px; letter-spacing:1px;">SECURITY CLEARANCE: LEVEL 01 RESTRICTED</span>
+      <span class="badge green" style="font-size:0.75rem; padding:4px 10px; letter-spacing:1px;">STATUS: ENCRYPTED (256-BIT)</span>
+    </div>
+
+    <p style="color:var(--text-secondary); font-size:0.9rem; max-width:540px; margin-bottom:34px; line-height:1.6; letter-spacing:0.5px;">
+      Access is strictly monitored under Directorate Security Regulations. Press anywhere to authenticate credentials and enter headquarters.
+    </p>
+
+    <button class="btn-dci primary" style="padding:16px 40px; font-size:1.05rem; border-radius:30px; box-shadow:0 0 35px rgba(239, 68, 68, 0.5); letter-spacing:1px; font-weight:600;">
+      🔐 ACCESS CLASSIFIED INVESTIGATION TERMINAL
+    </button>
+
+    <div style="position:absolute; bottom:25px; font-size:0.7rem; color:var(--text-muted); letter-spacing:2px;">
+      SYSTEM VERIFICATION: ACTIVE // ALL TRANSMISSIONS LOGGED
+    </div>
+  </div>
+
+  <!-- TOP CLASSIFICATION BAR WITH UNMUTED LOCKWOOD & CO. AUDIO CONTROL -->
+  <div class="classification-bar">
+    <div>DCI SECURE NETWORK // CLASSIFICATION: INTERNAL</div>
+    <div class="terminal-status-text">
+      <span class="status-dot"></span>
+      <span id="terminal-animated-text">CONNECTION ESTABLISHED // ENCRYPTION: ACTIVE</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <button class="btn-audio-compact" id="ambience-toggle-btn" title="Toggle Lockwood & Co. Theme Audio" onclick="window.audioEngine.toggleAmbience()">
+        🔊 SOUND
+      </button>
+      <div>clearance: AUTHORIZATION REQUIRED</div>
+    </div>
+  </div>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="dci-nav-header">
+    <div class="brand-box">
+      <img src="images/dci_official_logo.png" alt="DCI Official Logo" style="width:48px; height:48px; border-radius:50%; box-shadow:0 0 12px rgba(245, 158, 11, 0.3); object-fit:contain;">
+      <div class="brand-text">
+        <h1>DIRECTORATE OF CRIMINAL INVESTIGATION</h1>
+        <p>CLASSIFIED INVESTIGATIVE OPERATIONS DIVISION • "TRUTH • EVIDENCE • JUSTICE"</p>
+      </div>
+    </div>
+
+    <div class="nav-links">
+      <a class="nav-link" onclick="scrollToSection('landing-hero')">ABOUT</a>
+      <a class="nav-link" onclick="scrollToSection('landing-features')">HOW IT WORKS</a>
+      <a class="nav-link" onclick="scrollToSection('landing-ranks')">RANKS</a>
+      <div id="nav-user-box" style="display:flex; gap:10px; align-items:center;">
+        <button class="btn-dci" onclick="openModal('modal-login')">ACCESS SECURE TERMINAL</button>
+        <button class="btn-dci primary" onclick="openModal('modal-register')">REGISTER AS DETECTIVE</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- LANDING PAGE HERO -->
+  <section class="hero-section" id="landing-hero">
+    <div class="hero-motto">DIRECTORATE OF CRIMINAL INVESTIGATION // RECRUITMENT NETWORK</div>
+    <h1 class="hero-headline">EVERY CRIME LEAVES A TRACE.</h1>
+    <h2 class="hero-subhead">Your job is to find it.</h2>
+    <p class="hero-body">
+      The Directorate does not give you answers. It gives you evidence. You have been cleared to enter the Directorate's investigative network. Examine physical evidence, extract digital footprints, interrogate suspects, and reconstruct minute-by-minute timelines.
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn-dci primary" style="padding:14px 28px; font-size:0.95rem;" onclick="openModal('modal-register')">JOIN THE INVESTIGATION — REGISTER NOW</button>
+      <button class="btn-dci" style="padding:14px 24px; font-size:0.95rem;" onclick="openModal('modal-login')">ACCESS SECURE TERMINAL</button>
+    </div>
+  </section>
+
+  <!-- FEATURES: BECOME A DETECTIVE -->
+  <section class="feature-section" id="landing-features">
+    <h2 class="section-title">ENTER THE INVESTIGATIVE SERVICE</h2>
+    <div class="cards-grid-4">
+      <div class="dci-card">
+        <div class="card-num">[01] RECONNAISSANCE</div>
+        <h3>INVESTIGATE</h3>
+        <p>Examine physical evidence, digital footprints, cell-tower CDR records, financial slush funds, and witness statements.</p>
+      </div>
+      <div class="dci-card">
+        <div class="card-num">[02] INTERROGATION</div>
+        <h3>INTERROGATE</h3>
+        <p>Question suspects under stress, execute strategic bluffs with circumstantial evidence, and dismantle false confessions.</p>
+      </div>
+      <div class="dci-card">
+        <div class="card-num">[03] RECONSTRUCTION</div>
+        <h3>RECONSTRUCT</h3>
+        <p>Build minute-by-minute timelines, track CCTV clock drifts, map floor plan blind spots, and connect red string evidence chains.</p>
+      </div>
+      <div class="dci-card">
+        <div class="card-num">[04] PROSECUTION</div>
+        <h3>PROVE</h3>
+        <p>Submit an 18-point indictment theory strong enough to withstand defense scrutiny and earn high-level clearance progression.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DETECTIVE HIERARCHY -->
+  <section class="feature-section" id="landing-ranks">
+    <h2 class="section-title">THE DETECTIVE HIERARCHY & CLEARANCE PROGRESSION</h2>
+    <p style="color:var(--text-secondary); margin-bottom:20px; font-size:0.9rem;">
+      Every officer enters as a Cadet Detective (Level 01). Successful investigations increase Experience (XP) and unlock restricted cases, advanced forensic testing, and multi-player joint operations.
+    </p>
+    <div class="ranks-list" id="ranks-accordion-container"></div>
+  </section>
+
+  <!-- DCI HEADQUARTERS DASHBOARD VIEW -->
+  <div id="hq-dashboard-view" style="display:none;">
+    <div class="hq-layout">
+      <!-- SIDEBAR -->
+      <aside class="hq-sidebar">
+        <div class="hq-nav-item active" onclick="switchHqTab('command', this)">📌 COMMAND CENTER</div>
+        <div class="hq-nav-item" onclick="switchHqTab('mail', this)">📧 DCI MAILBOX</div>
+        <div class="hq-nav-item" onclick="switchHqTab('library', this)">📂 CASE LIBRARY</div>
+        <div class="hq-nav-item" onclick="switchHqTab('two-player', this)">👥 JOINT CASE ROOMS</div>
+        <div class="hq-nav-item" onclick="switchHqTab('profile', this)">🪪 DETECTIVE PROFILE & CAREER BOOK</div>
+      </aside>
+
+      <!-- MAIN CONTENT AREA -->
+      <main class="hq-main-content">
+        <div id="hq-welcome-banner" style="margin-bottom:24px; border-bottom:1px solid var(--border-color); padding-bottom:14px;"></div>
+
+        <!-- TAB: COMMAND CENTER -->
+        <div class="hq-tab-content" id="hq-tab-command">
+          <!-- PROMOTION REVIEW PROGRESS CARD -->
+          <div id="hq-promotion-progress-container" style="margin-bottom:24px;"></div>
+
+          <div style="display:grid; grid-template-columns:380px 1fr; gap:30px;">
+            <!-- LEFT: DETECTIVE ID BADGE -->
+            <div>
+              <h3 style="font-family:var(--font-mono); color:#fff; font-size:1rem; margin-bottom:12px;">ACTIVE DETECTIVE CREDENTIAL</h3>
+              <div id="hq-profile-id-card"></div>
+            </div>
+
+            <!-- RIGHT: QUICK CASE ASSIGNMENT -->
+            <div>
+              <h3 style="font-family:var(--font-mono); color:#fff; font-size:1rem; margin-bottom:12px;">FEATURED ASSIGNMENT</h3>
+              <div id="hq-featured-assignment-card"></div>
+
+              <!-- TWO PLAYER ROOM QUICK JOIN -->
+              <div class="dci-card" style="margin-top:20px;">
+                <h3 style="font-family:var(--font-mono); color:#fff; font-size:1rem;">JOIN EXISTING JOINT INVESTIGATION</h3>
+                <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:4px;">Have a room code from another detective? Connect to share evidence and timeline data in real time.</p>
+                <div style="margin-top:14px;">
+                  <button class="btn-dci" onclick="twoPlayerRoom.joinRoom()">ENTER ROOM CODE</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: DCI ORGANIZATIONAL MAILBOX -->
+        <div class="hq-tab-content" id="hq-tab-mail" style="display:none;">
+          <div id="hq-tab-mail-container"></div>
+        </div>
+
+        <!-- TAB: CASE LIBRARY -->
+        <div class="hq-tab-content" id="hq-tab-library" style="display:none;">
+          <div id="case-library-container"></div>
+        </div>
+
+        <!-- TAB: JOINT CASE ROOMS -->
+        <div class="hq-tab-content" id="hq-tab-two-player" style="display:none;">
+          <div class="dci-card">
+            <h3 style="font-family:var(--font-mono); color:#fff; font-size:1.1rem; margin-bottom:8px;">TWO-PLAYER COOPERATIVE INVESTIGATION ROOMS</h3>
+            <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5; margin-bottom:20px;">
+              Collaborate with another detective in real time. Shared discovery log, shared evidence locker, shared timeline, and shared case board notes.
+            </p>
+            <div style="display:flex; gap:16px;">
+              <button class="btn-dci primary" onclick="twoPlayerRoom.createRoom('CASE-DCI-001')">CREATE NEW CASE ROOM</button>
+              <button class="btn-dci gold" onclick="twoPlayerRoom.joinRoom()">JOIN VIA INVITATION CODE</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: DETECTIVE PROFILE & CAREER SERVICE BOOK -->
+        <div class="hq-tab-content" id="hq-tab-profile" style="display:none;">
+          <div style="max-width:650px;">
+            <h3 style="font-family:var(--font-mono); color:#fff; font-size:1.1rem; margin-bottom:16px;">OFFICIAL DETECTIVE CAREER SERVICE BOOK</h3>
+            <div id="hq-profile-id-card-full"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- INTEGRATED OPERATION BLACKWOOD CASE OVERLAY -->
+  <div id="case-game-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; z-index:300; background:var(--bg-dark);">
+    <header class="dossier-header">
+      <div class="case-badge" style="display:flex; gap:12px; align-items:center;">
+        <img src="images/dci_official_logo.png" alt="DCI Logo" style="width:42px; height:42px; border-radius:50%; object-fit:contain;">
+        <div>
+          <span class="classified-stamp">DCI // CLASSIFIED CASE FILE</span>
+          <div class="case-title-box">
+            <h1 style="margin:0;">INVESTIGATION SUITE</h1>
+            <p style="margin:0;">DIRECTORATE OF CRIMINAL INVESTIGATION</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-status-bar">
+        <div class="status-metric">
+          <span class="metric-label">TIME REMAINING</span>
+          <span class="metric-value time" id="time-value">48h 00m</span>
+        </div>
+
+        <div class="status-metric">
+          <span class="metric-label">FORENSIC BUDGET</span>
+          <span class="metric-value budget" id="budget-value">$5,000</span>
+        </div>
+
+        <button class="btn-dci" onclick="exitCaseToHQ()" style="margin-left:15px; font-size:0.75rem;">EXIT TO DCI HQ</button>
+      </div>
+    </header>
+
+    <div class="main-wrapper">
+      <nav class="side-nav game-nav">
+        <button class="nav-btn active" data-view="briefing">📄 CASE BRIEFING</button>
+        <button class="nav-btn" data-view="case-board">📌 CASE BOARD</button>
+        <button class="nav-btn" data-view="dci-mail">📧 DCI MAIL</button>
+        <button class="nav-btn" data-view="suspects">👥 SUSPECT DOSSIERS</button>
+        <button class="nav-btn" data-view="interrogation">🎙️ INTERROGATION</button>
+        <button class="nav-btn" data-view="evidence">📦 EVIDENCE LOCKER</button>
+        <button class="nav-btn" data-view="timeline">⏱️ TIMELINE MATRIX</button>
+        <button class="nav-btn" data-view="floor-plan">🗺️ ACADEMY MAP</button>
+        <button class="nav-btn" data-view="forensic-lab">🧪 FORENSIC LAB</button>
+        <button class="nav-btn prosecution-btn" data-view="prosecution">⚖️ FILE RESOLUTION</button>
+      </nav>
+
+      <main class="view-container">
+        <!-- VIEW 1: CASE BRIEFING DOSSIER EXPLANATION -->
+        <section class="game-view active" id="view-briefing"></section>
+
+        <!-- VIEW 2: CASE BOARD VIEW WITH INTERACTIVE TOOLBAR & INSPECTOR PANEL -->
+        <section class="game-view" id="view-case-board">
+          <div class="case-board-toolbar" style="display:flex; gap:10px; align-items:center;">
+            <span style="font-size:0.8rem; font-weight:bold; color:#fff; margin-right:10px;">📌 CASE BOARD NETWORK GRAPH</span>
+            <button class="btn-dci" style="font-size:0.75rem; padding:4px 10px;" onclick="window.caseBoard.addNoteNode()">+ ADD STICKY NOTE</button>
+            <button class="btn-dci" style="font-size:0.75rem; padding:4px 10px;" onclick="window.caseBoard.autoArrange()">📐 AUTO-ARRANGE</button>
+            <button class="btn-dci" style="font-size:0.75rem; padding:4px 10px;" onclick="window.caseBoard.toggleConnectMode()" id="btn-connect-mode">🔴 CONNECT STRING</button>
+            <button class="btn-dci" style="font-size:0.75rem; padding:4px 10px;" onclick="window.caseBoard.clearStrings()">🧹 CLEAR STRINGS</button>
+          </div>
+
+          <div class="hypothesis-panel">
+            <h4 style="font-size:0.85rem; color:#fff;">PROSECUTION HYPOTHESIS CONFIDENCE</h4>
+            <div class="hypothesis-score-box">
+              <span style="font-size:0.8rem; color:var(--text-muted);">CONFIDENCE:</span>
+              <span style="font-size:1.2rem; font-weight:bold; color:var(--accent-green);" id="hypothesis-score">0%</span>
+            </div>
+          </div>
+
+          <!-- NODE INSPECTOR SIDE PANEL -->
+          <div id="board-node-inspector" style="display:none; position:absolute; top:0; right:0; bottom:0; width:340px; background:rgba(9,14,26,0.95); border-left:1px solid var(--border-light); padding:20px; backdrop-filter:blur(10px); z-index:50; font-family:var(--font-mono); color:#fff; overflow-y:auto; box-shadow:-10px 0 30px rgba(0,0,0,0.8);"></div>
+
+          <canvas id="case-board-canvas"></canvas>
+        </section>
+
+        <!-- VIEW 3: DCI MAIL IN CASE DOSSIER -->
+        <section class="game-view" id="view-dci-mail">
+          <div id="view-dci-mail-container"></div>
+        </section>
+
+        <section class="game-view" id="view-suspects">
+          <div class="view-header"><h2>PRIMARY SUSPECT DOSSIERS</h2></div>
+          <div class="suspects-grid" id="suspects-grid-container"></div>
+        </section>
+
+        <section class="game-view" id="view-interrogation">
+          <div class="interrogation-layout">
+            <div class="interrogation-sidebar">
+              <div id="interrogation-suspect-header"></div>
+            </div>
+            <div class="interrogation-main">
+              <div class="interrogation-chat-log" id="interrogation-chat-log"></div>
+              <div class="interrogation-controls">
+                <div class="question-options" id="question-options-list"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="game-view" id="view-evidence">
+          <div class="view-header"><h2>CLASSIFIED EVIDENCE LOCKER</h2></div>
+          <div class="evidence-filters">
+            <button class="filter-btn case-filter-btn active" data-category="ALL">ALL EVIDENCE</button>
+            <button class="filter-btn case-filter-btn" data-category="PHYSICAL">PHYSICAL</button>
+            <button class="filter-btn case-filter-btn" data-category="DIGITAL">DIGITAL</button>
+            <button class="filter-btn case-filter-btn" data-category="FINANCIAL">FINANCIAL</button>
+          </div>
+          <div class="evidence-grid" id="evidence-grid-container"></div>
+        </section>
+
+        <section class="game-view" id="view-timeline">
+          <div class="view-header"><h2>MINUTE-BY-MINUTE TIMELINE MATRIX</h2></div>
+          <div class="timeline-container" id="timeline-matrix-table-container"></div>
+        </section>
+
+        <section class="game-view" id="view-floor-plan">
+          <div class="floorplan-layout">
+            <div class="floorplan-canvas-wrap"><canvas id="floorplan-canvas"></canvas></div>
+            <div class="room-details-panel"><div id="room-details-content"></div></div>
+          </div>
+        </section>
+
+        <section class="game-view" id="view-forensic-lab">
+          <div class="view-header"><h2>FORENSIC ANALYSIS LABORATORY</h2></div>
+          <div class="forensic-grid">
+            <div class="forensic-tests-list"><div id="forensic-tests-list"></div></div>
+            <div class="forensic-results-list"><div id="forensic-results-list"></div></div>
+          </div>
+        </section>
+
+        <section class="game-view" id="view-prosecution">
+          <div class="view-header"><h2>OFFICIAL PROSECUTION INDICTMENT</h2></div>
+          <div class="prosecution-container" id="prosecution-form-container"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- REGISTRATION MODAL -->
+  <div class="modal-overlay" id="modal-register">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span>DIRECTORATE PERSONNEL REGISTRATION</span>
+        <button class="btn-dci" onclick="closeModal('modal-register')">✕</button>
+      </div>
+      <div class="modal-body">
+        <form onsubmit="handleRegistrationSubmit(event)">
+          <div class="form-group">
+            <label>DETECTIVE CALLSIGN (UNIQUE IDENTIFIER)</label>
+            <input type="text" id="reg-callsign" placeholder="e.g. RAVEN-17" required autocomplete="off">
+            <div class="callsign-status-msg" id="callsign-status-msg">Enter custom callsign to verify availability.</div>
+          </div>
+          <div class="form-group">
+            <label>FULL DISPLAY NAME</label>
+            <input type="text" id="reg-name" placeholder="e.g. Alex Morgan" required>
+          </div>
+          <div class="form-group">
+            <label>SECURE EMAIL ADDRESS</label>
+            <input type="email" id="reg-email" placeholder="detective@dci-gov.org" required>
+          </div>
+          <div class="form-group">
+            <label>PASSWORD</label>
+            <input type="password" id="reg-password" placeholder="••••••••" required>
+          </div>
+          <div class="form-group">
+            <label>PREFERRED INVESTIGATION STYLE</label>
+            <select id="reg-style">
+              <option value="Analytical">Analytical & Timeline Focused</option>
+              <option value="Interrogation">Interrogation & Psychological</option>
+              <option value="Forensics">Forensics & Physical Evidence</option>
+              <option value="Digital">Digital & Cyber Intelligence</option>
+              <option value="Balanced">Balanced Field Investigator</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>OPERATIONAL JURISDICTION / COUNTRY</label>
+            <input type="text" id="reg-country" value="Global Operations">
+          </div>
+
+          <div id="reg-error-msg" style="color:var(--accent-red); font-size:0.8rem; display:none; margin-bottom:12px;"></div>
+
+          <button type="submit" class="btn-dci primary" style="width:100%; justify-content:center; padding:12px; margin-top:10px;">SUBMIT PERSONNEL RECRUITMENT APPLICATION</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- VERIFICATION MODAL -->
+  <div class="modal-overlay" id="modal-verification">
+    <div class="modal-card" style="width:600px;">
+      <div class="modal-body" id="verification-body"></div>
+    </div>
+  </div>
+
+  <!-- LOGIN MODAL WITH HIGH-TECH AUTHENTICATION ANIMATION -->
+  <div class="modal-overlay" id="modal-login">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span>SECURE INVESTIGATIVE TERMINAL LOGIN</span>
+        <button class="btn-dci" onclick="closeModal('modal-login')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="login-form-content">
+          <form onsubmit="handleLoginSubmit(event)">
+            <div class="form-group">
+              <label>DETECTIVE ID / CALLSIGN / EMAIL</label>
+              <input type="text" id="login-id" placeholder="e.g. RAVEN-17 or DCI-26-481927" required>
+            </div>
+            <div class="form-group">
+              <label>PASSWORD</label>
+              <input type="password" id="login-password" placeholder="••••••••" required>
+            </div>
+
+            <div id="login-error-msg" style="color:var(--accent-red); font-size:0.8rem; display:none; margin-bottom:12px;"></div>
+
+            <button type="submit" class="btn-dci primary" style="width:100%; justify-content:center; padding:12px; margin-top:10px;">AUTHENTICATE CREDENTIALS</button>
+            
+            <div style="margin-top:14px; padding-top:14px; border-top:1px solid var(--border-color); text-align:center;">
+              <span style="font-size:0.72rem; color:var(--text-muted); display:block; margin-bottom:8px;">PUBLIC TESTING & DEMO ACCESS:</span>
+              <button type="button" class="btn-dci gold" style="width:100%; justify-content:center; padding:10px; font-size:0.8rem;" onclick="document.getElementById('login-id').value='DEMO-OFFICER'; document.getElementById('login-password').value='demo123'; handleLoginSubmit(event);">
+                ⚡ ONE-CLICK DEMO DETECTIVE LOGIN
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div id="login-anim-content" style="display:none; font-family:var(--font-mono); text-align:center; padding:10px;">
+          <div style="font-size:0.75rem; color:var(--accent-amber); letter-spacing:2px; margin-bottom:10px;">DCI SECURE NETWORK // BIOMETRIC VERIFICATION</div>
+          <div id="login-anim-logs" style="font-size:0.85rem; text-align:left; background:#05080e; border:1px solid var(--border-color); padding:14px; border-radius:4px; min-height:90px; margin-bottom:16px;"></div>
+          
+          <div id="login-anim-stamp" style="display:none; margin-top:10px;">
+            <span class="classified-stamp" style="color:var(--accent-green); border-color:var(--accent-green); font-size:1.1rem;">✓ AUTHENTICATION SUCCESSFUL</span>
+            <div style="font-size:0.75rem; color:var(--text-muted); margin-top:8px;">ENTERING DCI HEADQUARTERS...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TWO-PLAYER ROOM MODAL -->
+  <div class="modal-overlay" id="modal-two-player-room">
+    <div class="modal-card">
+      <div class="modal-header">
+        <span>DCI JOINT INVESTIGATION ROOM</span>
+        <button class="btn-dci" onclick="closeModal('modal-two-player-room')">✕</button>
+      </div>
+      <div class="modal-body" id="two-player-room-content"></div>
+    </div>
+  </div>
+
+  <!-- PROMOTION REVIEW MODAL -->
+  <div class="modal-overlay" id="modal-promotion-review">
+    <div class="modal-card" style="width:620px;">
+      <div class="modal-header">
+        <span>DIRECTORATE PROMOTION REVIEW BOARD</span>
+        <button class="btn-dci" onclick="closeModal('modal-promotion-review')">✕</button>
+      </div>
+      <div class="modal-body" id="promotion-review-body"></div>
+    </div>
+  </div>
+
+  <!-- VERDICT MODAL FOR GAME -->
+  <div class="modal-overlay" id="verdict-modal">
+    <div class="modal-card verdict-modal">
+      <div class="modal-header">
+        <span style="font-weight:bold; color:var(--accent-red);">CLASSIFIED CASE FILE RESOLUTION</span>
+        <button class="btn-dci" onclick="closeModal('verdict-modal')">CLOSE</button>
+      </div>
+      <div class="modal-body" id="verdict-modal-body"></div>
+      <div class="modal-footer" style="padding:16px; border-top:1px solid var(--border-color); display:flex; justify-content:flex-end;">
+        <button class="btn-dci primary" onclick="location.reload()">RE-INITIALIZE INVESTIGATION</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFFICIAL HIGH COURT CONVICTION ORDER MODAL -->
+  <div class="modal-overlay" id="modal-court-order">
+    <div class="modal-card" style="width:720px; background:transparent; border:none; box-shadow:none;">
+      <div class="modal-body" id="court-order-body" style="padding:0;"></div>
+    </div>
+  </div>
+
+  <!-- SCRIPT LIBRARIES -->
+  <script src="js/dci_api.js"></script>
+  <script src="js/landing_ui.js"></script>
+  <script src="js/registration.js"></script>
+  <script src="js/hq_dashboard.js"></script>
+  <script src="js/two_player_room.js"></script>
+  <script src="js/case_library.js"></script>
+  <script src="js/promotion_engine.js"></script>
+
+  <!-- CASE GAME DATA & ENGINE SCRIPTS -->
+  <script src="js/case_game/case_data.js"></script>
+  <script src="js/case_game/case_data_002.js"></script>
+  <script src="js/case_game/dci_mail_data.js"></script>
+  <script src="js/case_game/audio.js"></script>
+  <script src="js/case_game/game_engine.js"></script>
+  <script src="js/dci_mail.js"></script>
+  <script src="js/case_game/case_board_graph.js"></script>
+  <script src="js/case_game/interrogation.js"></script>
+  <script src="js/case_game/forensic_lab.js"></script>
+  <script src="js/case_game/timeline_matrix.js"></script>
+  <script src="js/case_game/floor_plan.js"></script>
+  <script src="js/case_game/prosecution.js"></script>
+  <script src="js/case_game/case_app.js"></script>
+
+  <script>
+    function initializeTerminalAndAudio() {
+      const bootElem = document.getElementById('dci-boot-overlay');
+      if (bootElem) {
+        bootElem.style.transition = 'opacity 0.25s ease';
+        bootElem.style.opacity = '0';
+        setTimeout(() => { bootElem.style.display = 'none'; }, 250);
+      }
+      if (window.audioEngine) {
+        window.audioEngine.startAmbience();
+      }
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.classList.remove('active');
+    }
+
+    function scrollToSection(id) {
+      const elem = document.getElementById(id);
+      if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (window.audioEngine) {
+        window.audioEngine.loadAudioBuffer();
+      }
+
+      window.addEventListener('click', () => {
+        if (window.audioEngine && !window.audioEngine.ambiencePlaying) {
+          window.audioEngine.startAmbience();
+        }
+      }, { once: true });
+
+      const profile = await window.dciApi.getProfile();
+      if (profile) {
+        window.currentDetective = profile;
+        showHeadquartersDashboard(profile);
+      }
+    });
+  </script>
+</body>
+</html>

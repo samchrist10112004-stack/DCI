@@ -1,0 +1,2 @@
+# DCI PLATFORM PYTHON DEPENDENCIES
+# Built with Python standard library HTTP server & SQLite3
