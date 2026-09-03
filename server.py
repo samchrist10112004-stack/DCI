@@ -59,11 +59,11 @@ DATABASE_URL = os.environ.get("DATABASE_URL", "")
 class DBWrapper:
     def __init__(self):
         self.is_postgres = False
-        if DATABASE_URL and ("postgres://" in DATABASE_URL or "postgresql://" in DATABASE_URL):
+        if DATABASE_URL and ("postgres://" in DATABASE_URL or "postgresql://" in DATABASE_URL) and "[YOUR-PASSWORD]" not in DATABASE_URL:
             try:
                 import psycopg2
                 clean_url = DATABASE_URL.split("?")[0]
-                self.conn = psycopg2.connect(clean_url)
+                self.conn = psycopg2.connect(clean_url, connect_timeout=3)
                 self.conn.autocommit = True
                 self.is_postgres = True
             except Exception as e:
@@ -739,32 +739,34 @@ class DCIServerHandler(http.server.BaseHTTPRequestHandler):
             if not callsign or not display_name or not email or not password:
                 return self._send_json({"error": "All required fields must be filled."}, 400)
 
-            conn = sqlite3.connect(DB_FILE)
-            cursor = conn.cursor()
-
-            cursor.execute("SELECT id FROM users WHERE email = ?", (email,))
+            db = get_db()
+            cursor = db.execute("SELECT id FROM users WHERE email = ?", (email,))
             if cursor.fetchone():
-                conn.close()
+                db.close()
                 return self._send_json({"error": "EMAIL ALREADY REGISTERED IN DCI DATABASE."}, 400)
 
-            cursor.execute("SELECT id FROM detectives WHERE UPPER(callsign) = ?", (callsign,))
+            cursor = db.execute("SELECT id FROM detectives WHERE UPPER(callsign) = ?", (callsign,))
             if cursor.fetchone():
-                conn.close()
+                db.close()
                 return self._send_json({"error": "CALLSIGN ALREADY ASSIGNED TO ANOTHER DETECTIVE."}, 400)
 
             token = secrets.token_hex(16)
             pwd_hash = hash_password(password)
-            cursor.execute("INSERT INTO users (email, password_hash, token) VALUES (?, ?, ?)", (email, pwd_hash, token))
-            user_id = cursor.lastrowid
+            cursor = db.execute("INSERT INTO users (email, password_hash, token) VALUES (?, ?, ?)", (email, pwd_hash, token))
+            
+            # Fetch last inserted user_id for foreign key relation
+            cursor = db.execute("SELECT id FROM users WHERE email = ?", (email,))
+            u_row = cursor.fetchone()
+            user_id = u_row[0] if u_row else None
 
             det_id = generate_detective_id()
-            cursor.execute('''
+            db.execute('''
                 INSERT INTO detectives (user_id, detective_id, callsign, display_name, country, style, rank, clearance_level, xp, reputation)
                 VALUES (?, ?, ?, ?, ?, ?, 'CADET DETECTIVE', 1, 0, 'UNKNOWN')
             ''', (user_id, det_id, callsign, display_name, country, style))
 
-            conn.commit()
-            conn.close()
+            db.commit()
+            db.close()
 
             detective = {
                 "detective_id": det_id,
@@ -796,10 +798,8 @@ class DCIServerHandler(http.server.BaseHTTPRequestHandler):
 
             pwd_hash = hash_password(password)
 
-            conn = sqlite3.connect(DB_FILE)
-            cursor = conn.cursor()
-
-            cursor.execute('''
+            db = get_db()
+            cursor = db.execute('''
                 SELECT u.id, u.email, d.detective_id, d.callsign, d.display_name, d.country, d.style,
                        d.rank, d.clearance_level, d.xp, d.reputation, d.cases_solved, d.cases_failed,
                        d.cases_completed_count, d.wrongful_accusations, d.evidence_accuracy
@@ -811,14 +811,14 @@ class DCIServerHandler(http.server.BaseHTTPRequestHandler):
             
             row = cursor.fetchone()
             if not row:
-                conn.close()
+                db.close()
                 return self._send_json({"error": "AUTHENTICATION FAILED: INVALID CREDENTIALS"}, 401)
 
             user_id = row[0]
             token = secrets.token_hex(16)
-            cursor.execute("UPDATE users SET token = ? WHERE id = ?", (token, user_id))
-            conn.commit()
-            conn.close()
+            db.execute("UPDATE users SET token = ? WHERE id = ?", (token, user_id))
+            db.commit()
+            db.close()
 
             detective = {
                 "detective_id": row[2],
